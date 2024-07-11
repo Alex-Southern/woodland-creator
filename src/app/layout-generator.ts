@@ -89,9 +89,9 @@ export function generateLayout(width: number, height: number, settings: ISetting
       for (let p = 0; p < paths; p++) {
         const curNodeEdges = potentialEdges[i];
         const possibleNewEdges = Object.keys(curNodeEdges || {})
-          .filter((e) => !blockedEdges[`${e}-${i}`] && !blockedEdges[`${i}-${e}`]
-                      && !chosenEdges[`${e}-${i}`] && !chosenEdges[`${i}-${e}`]
-                      && edgesPerClearing[e] < maxConnections && edgesPerClearing[i] < maxConnections);
+            .filter((e) => !blockedEdges[`${e}-${i}`] && !blockedEdges[`${i}-${e}`]
+                && !chosenEdges[`${e}-${i}`] && !chosenEdges[`${i}-${e}`]
+                && edgesPerClearing[e] < maxConnections && edgesPerClearing[i] < maxConnections);
         const edge = sample(possibleNewEdges);
 
         if (edge) {
@@ -109,11 +109,15 @@ export function generateLayout(width: number, height: number, settings: ISetting
     });
 
     // validate # connections per clearing
-    if (Object.values(edgesPerClearing).some((v) => v < minConnections || v > maxConnections)) {
+    if (Object.values(edgesPerClearing).some((v: number) => {
+      return v < minConnections || v > maxConnections;
+    })) {
       isValid = false;
     }
 
-    if (isValid) { break; }
+    if (isValid) {
+      break;
+    }
   }
 
   if (attempts >= maxAttempts) { error = "Max retry threshold reached; map may require adjustments to be valid."; }
